@@ -138,22 +138,18 @@
 \item должно быть просто перенести и тестировать не только hh.sites.common но и любое приложение/либу, использующую фронтик
 \end{enumerate}
 
-\section{А чего, напротив, не требуется}
-
-\begin{enumerate}
-\item "строгих" проверок
-\item проверок на гонки
-\item 100\verb+%+ эмуляции HTTP
-\end{enumerate}
+\section{Хочется}
+Наглядности и читаемости
 
 \section{"Встраивающийся" тестовый фреймворк}
+
 \begin{itemize}
 \item Приложения фронтика ходят в xml-back'и, затем накладывают xsl
 \item Такая узкая специализация позволяет встроиться и перехватывать запросы где-то в районе HTTP-слоя и считать, что приложение изолировано.
 \end{itemize}
 
 
-\section{Моки сервисов хотелось бы писать вот так}
+\section{Моки сервисов}
 \small
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k}{class} \PY{n+nc}{SofeaEmployerMock}\PY{p}{(}\PY{n}{ServiceMock}\PY{p}{)}\PY{p}{:}
@@ -172,7 +168,7 @@
 \PY{l+s+sd}{           </vacancies>'''}
 \end{Verbatim}
 
-\section{Вот так мог бы выглядеть тест}
+\section{Тесты}
 
 \small
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -193,6 +189,7 @@
 \end{Verbatim}
 
 \verb+vacancy_list_page_by_manager+ - это имя тестируемого метода
+\verb+self.register+, \verb+self.handler+ - из суперкласса
 
 \section{Куда можно двигаться дальше}
 
