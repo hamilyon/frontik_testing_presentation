@@ -1,4 +1,6 @@
 class SofeaEmployerMock(ServiceMock):
+ def __init__(self):
+  super(SofeaEmployerMock, self,).__init__('serviceHost')
  def fetch_request(self, req, callback = None):
    if '/vacancy/short?lang=RU&id=1' == req.url:
      return 200, 

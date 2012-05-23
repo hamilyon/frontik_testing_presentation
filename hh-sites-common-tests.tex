@@ -120,32 +120,35 @@
 \TitleSlide
 \includegraphics{logo.png}
 
-\section{Цель}
-\emph{Целью} является обеспечить test first разработку в hh.sites.common
-
-+ покрытие тестами его кода для регрессии
-
-+ ещё больше развязать разработку и верстку
-
+\section{Мотивация и цель}
+Тестовый фреймворк должен быть обеспечить тестами разработку в hh.sites.common
 
 \section{Требования к тестам}
 
 \begin{enumerate}
 \item не должны зависеть от способа их запуска и чего-то требовать от окружения (т.е. unit тесты)
-\item система их поддержки должна быть достаточно гибкой и быть написана достаточно быстро
 \item должны быть быстрыми
 \item должны писаться сравнительно легко
-\item должно быть просто перенести и тестировать не только hh.sites.common но и любое приложение/либу, использующую фронтик
+\item должно быть просто перенести и тестировать не только hh.sites.common но и любое приложение/либу, использующую frontik
+\item Наглядность и читаемость принимается во внимание 
 \end{enumerate}
-
-\section{Хочется}
-Наглядности и читаемости
 
 \section{"Встраивающийся" тестовый фреймворк}
 
 \begin{itemize}
-\item Приложения фронтика ходят в xml-back'и, затем накладывают xsl
+\item Приложения frontik ходят в xml-back'и, затем накладывают xsl
 \item Такая узкая специализация позволяет встроиться и перехватывать запросы где-то в районе HTTP-слоя и считать, что приложение изолировано.
+\item У самого frontik'a модульный дизайн, позволяет встроиться почти где угодно
+
+\end{itemize}
+
+\section{Ключевые решения в ходе разработки}
+
+\begin{itemize}
+\item \emph{Сильно} завязан на frontik. Использует настоящий экземпляр frontik c подмененным http-client
+\item \emph{Нет} tornado/ioloop, колбэки вызываются явно
+\item \emph{Нет} HTTP и сокетов, встранивание http-client напрямую ходит к мокам сервисов
+
 \end{itemize}
 
 
@@ -153,6 +156,8 @@
 \small
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k}{class} \PY{n+nc}{SofeaEmployerMock}\PY{p}{(}\PY{n}{ServiceMock}\PY{p}{)}\PY{p}{:}
+ \PY{k}{def} \PY{n+nf}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:}
+  \PY{n+nb}{super}\PY{p}{(}\PY{n}{SofeaEmployerMock}\PY{p}{,} \PY{n+nb+bp}{self}\PY{p}{,}\PY{p}{)}\PY{o}{.}\PY{n}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{l+s}{'}\PY{l+s}{serviceHost}\PY{l+s}{'}\PY{p}{)}
  \PY{k}{def} \PY{n+nf}{fetch\PYZus{}request}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{req}\PY{p}{,} \PY{n}{callback} \PY{o}{=} \PY{n+nb+bp}{None}\PY{p}{)}\PY{p}{:}
    \PY{k}{if} \PY{l+s}{'}\PY{l+s}{/vacancy/short?lang=RU&id=1}\PY{l+s}{'} \PY{o}{==} \PY{n}{req}\PY{o}{.}\PY{n}{url}\PY{p}{:}
      \PY{k}{return} \PY{l+m+mi}{200}\PY{p}{,} 
@@ -177,19 +182,16 @@
     \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{handler}\PY{p}{,} \PY{n}{vacancy\PYZus{}list\PYZus{}page\PYZus{}by\PYZus{}manager}\PY{p}{,} \PY{l+s}{'}\PY{l+s}{3}\PY{l+s}{'}\PY{p}{,} \PY{l+s}{'}\PY{l+s}{1}\PY{l+s}{'}\PY{p}{)}
 \PY{n}{doc} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{handler}\PY{o}{.}\PY{n}{doc}\PY{o}{.}\PY{n}{root\PYZus{}node}
 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{assertEqual}\PY{p}{(}
-    \PY{n}{doc}\PY{o}{.}\PY{n}{xpath}\PY{p}{(}
-        \PY{l+s}{'}\PY{l+s}{//employer/employerManager/fullName/text()}\PY{l+s}{'}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}
-                 \PY{l+s}{u'}\PY{l+s}{Evreni Petrovich}\PY{l+s}{'}\PY{p}{)}
+    \PY{n}{doc}\PY{o}{.}\PY{n}{findtext}\PY{p}{(}\PY{l+s}{'}\PY{l+s}{vacancy/vacancyId}\PY{l+s}{'}\PY{p}{)}\PY{p}{,} \PY{l+s}{'}\PY{l+s}{1}\PY{l+s}{'}\PY{p}{)}
 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{assertEqual}\PY{p}{(}
-    \PY{n}{doc}\PY{o}{.}\PY{n}{xpath}\PY{p}{(}
-        \PY{l+s}{'}\PY{l+s}{//employer/@id}\PY{l+s}{'}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+s}{'}\PY{l+s}{1}\PY{l+s}{'}\PY{p}{)}
+    \PY{n}{doc}\PY{o}{.}\PY{n}{findtext}\PY{p}{(}\PY{l+s}{'}\PY{l+s}{company/id}\PY{l+s}{'}\PY{p}{)}\PY{p}{,} \PY{l+s}{'}\PY{l+s}{63357}\PY{l+s}{'}\PY{p}{)}
 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{assertEqual}\PY{p}{(}
-    \PY{n}{doc}\PY{o}{.}\PY{n}{xpath}\PY{p}{(}
-        \PY{l+s}{'}\PY{l+s}{//employer/russia/text()}\PY{l+s}{'}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+s}{'}\PY{l+s}{true}\PY{l+s}{'}\PY{p}{)}
+    \PY{n}{doc}\PY{o}{.}\PY{n}{findtext}\PY{p}{(}\PY{l+s}{'}\PY{l+s}{company/name/}\PY{l+s}{'}\PY{p}{)}\PY{p}{,} \PY{l+s}{'}\PY{l+s}{PROFPARK, ZAO}\PY{l+s}{'}\PY{p}{)}
 \end{Verbatim}
 
-\verb+vacancy_list_page_by_manager+ - это имя тестируемого метода
-\verb+self.register+, \verb+self.handler+ - из суперкласса
+\verb+vacancy_list_page_by_manager+ - это метод под тестом
+
+\verb+self.register+, \verb+self.handler+, \verb+execute_async_method+ - из суперкласса
 
 \section{Куда можно двигаться дальше}
 
@@ -197,8 +199,9 @@
 \item Отказаться от наивного вручную написанного xml в моках внешних сервисов, не потеряв при этом простоты и наглядности
 \item Требуемые доработки:
 \begin{itemize}
-\item поддержка \emph{POST}, \emph{DELETE} и \emph{PUT}
-\item поддержка Content-type \emph{не} XML
+\item больше документации
+\item поддержка \emph{POST}, а заодно \emph{DELETE} и \emph{PUT}
+\item поддержка Content-Type \emph{не} XML
 
 \end{itemize}
 
