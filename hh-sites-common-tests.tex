@@ -6,13 +6,6 @@
 % "А вот теперь --- слайды!"
 \usepackage{slides}
 
-\IfFileExists{cyrtimes.sty}
-    {
-        \usepackage{cyrtimespatched}
-    }
-    {
-        % А если Times нету, то будет CM...
-    }
 \usepackage{graphicx}
 
 \def\Person{Шапошников А.А.}
@@ -117,11 +110,11 @@
 
 \begin{document}
 
-\TitleSlide
 \includegraphics{logo.png}
+\TitleSlide
 
 \section{Мотивация и цель}
-Тестовый фреймворк должен быть обеспечить тестами разработку в hh.sites.common
+Тестовый фреймворк должен обеспечить возможность тестировать код в hh.sites.common
 
 \section{Требования к тестам}
 
@@ -130,7 +123,7 @@
 \item должны быть быстрыми
 \item должны писаться сравнительно легко
 \item должно быть просто перенести и тестировать не только hh.sites.common но и любое приложение/либу, использующую frontik
-\item Наглядность и читаемость принимается во внимание 
+\item наглядность и читаемость является плюсом
 \end{enumerate}
 
 \section{"Встраивающийся" тестовый фреймворк}
@@ -147,10 +140,9 @@
 \begin{itemize}
 \item \emph{Сильно} завязан на frontik. Использует настоящий экземпляр frontik c подмененным http-client
 \item \emph{Нет} tornado/ioloop, колбэки вызываются явно
-\item \emph{Нет} HTTP и сокетов, встранивание http-client напрямую ходит к мокам сервисов
+\item \emph{Нет} HTTP и сокетов, http-client напрямую ходит к мокам сервисов
 
 \end{itemize}
-
 
 \section{Моки сервисов}
 \small
