@@ -108,6 +108,19 @@
 \makeatother
 % /pygments
 
+\usepackage{fontspec} % loaded by polyglossia, but included here for transparency 
+\usepackage{polyglossia}
+\setmainlanguage{russian} 
+\setotherlanguage{english}
+
+% XeLaTeX can use any font installed in your system fonts folder
+% Linux Libertine in the next line can be replaced with any 
+% OpenType or TrueType font that supports the Cyrillic script.
+\setromanfont[Mapping=tex-text]{Liberation Serif}
+\setsansfont[Mapping=tex-text]{Liberation Sans}  % Without this Cyrillic Sans Serif text won't show.
+\setmonofont[Mapping=tex-text]{Nimbus Mono L}
+
+
 \begin{document}
 
 \includegraphics{logo.png}

@@ -120,7 +120,8 @@ unicode=true
 
 %% override the options of the .col file to get bigger fonts in latex
 \renewcommand\normalsize{%
-   \@setfontsize\normalsize{28pt}{30pt plus 10pt}%
+   %\bfseries
+   \@setfontsize\normalsize{28pt}{30pt plus 10pt}
 %   \@setfontsize\normalsize{26}{50pt plus 20pt minus 20pt}%
    \abovedisplayskip 12\p@ \@plus3\p@ \@minus7\p@
    \abovedisplayshortskip \z@ \@plus3\p@
@@ -140,6 +141,7 @@ unicode=true
                \itemsep \parsep}%
    \belowdisplayskip \abovedisplayskip
 }
+
 
 \renewcommand\footnotesize{%
    \@setfontsize\footnotesize{20}\@xiipt
