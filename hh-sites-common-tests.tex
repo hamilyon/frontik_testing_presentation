@@ -9,7 +9,7 @@
 \usepackage{graphicx}
 
 \def\Person{Шапошников А.А.}
-\def\Title{Тесты в hh.sites.common}
+\def\Title{Тесты во фронтике}
 \def\FooterTitle{\Title}
 \def\SubTitle{Пара идей о том, как можно тестировать приложения frontik}
 \input{title.tex}
@@ -108,16 +108,16 @@
 \makeatother
 % /pygments
 
-\usepackage{fontspec} % loaded by polyglossia, but included here for transparency 
+\usepackage{fontspec} % loaded by polyglossia, but included here for transparency
 \usepackage{polyglossia}
-\setmainlanguage{russian} 
+\setmainlanguage{russian}
 \setotherlanguage{english}
 
 % XeLaTeX can use any font installed in your system fonts folder
-% Linux Libertine in the next line can be replaced with any 
+% Linux Libertine in the next line can be replaced with any
 % OpenType or TrueType font that supports the Cyrillic script.
 \setromanfont[Mapping=tex-text]{Liberation Serif}
-\setsansfont[Mapping=tex-text]{Liberation Sans}  % Without this Cyrillic Sans Serif text won't show.
+\setsansfont[Mapping=tex-text]{Liberation Sans} % Without this Cyrillic Sans Serif text won't show.
 \setmonofont[Mapping=tex-text]{Nimbus Mono L}
 
 
@@ -127,38 +127,49 @@
 \TitleSlide
 
 \section{Мотивация и цель}
-Тестовый фреймворк должен обеспечить возможность тестировать код в hh.sites.common
+"TDD во фронтике"
+
+Обеспечить слой logic системой, позволяющей отлавливать баги связанные с изменением контрактов с внешними сервисами
+
+В целом дружить с нашей экосистемой
 
 \section{Требования к тестам}
 
 \begin{enumerate}
-\item не должны зависеть от способа их запуска и чего-то требовать от окружения (т.е. unit тесты)
-\item должны быть быстрыми
-\item должны писаться сравнительно легко
-\item должно быть просто перенести и тестировать не только hh.sites.common но и любое приложение/либу, использующую frontik
-\item наглядность и читаемость является плюсом
+\item Наглядность и читаемость, совместимость с unittest инфраструктурой python
+\item Не должны зависеть от способа их запуска и чего-то требовать от окружения (т.е. unit тесты)
 \end{enumerate}
 
-\section{"Встраивающийся" тестовый фреймворк}
+\section{Тестовая либа}
 
 \begin{itemize}
-\item Приложения frontik ходят в xml-back'и, затем накладывают xsl
-\item Такая узкая специализация позволяет встроиться и перехватывать запросы где-то в районе HTTP-слоя и считать, что приложение изолировано.
-\item У самого frontik'a модульный дизайн, позволяет встроиться почти где угодно
+\item Приложения frontik ходят в бэкэнды, затем опционально накладывают xsl
+\item Такая узкая специализация позволяет встроиться и перехватывать запросы где-то в районе HTTP-слоя и приложение изолировано
+да, ещё и memcache
 
 \end{itemize}
 
 \section{Ключевые решения в ходе разработки}
 
 \begin{itemize}
-\item \emph{Сильно} завязан на frontik. Использует настоящий экземпляр frontik c подмененным http-client
+\item Встроен во frontik. Использует настоящий экземпляр frontik c подмененным http-client
 \item \emph{Нет} tornado/ioloop, колбэки вызываются явно
 \item \emph{Нет} HTTP и сокетов, http-client напрямую ходит к мокам сервисов
+\item собственно наложение xsl можно тестировать, но зачем?
 
 \end{itemize}
 
+\section{Стандартный подход к тестированию}
+\begin{itemize}
+\item setUp подготавливает общую часть
+
+\item caveat: не поддерживается более одного вызова call в одном тесте
+\end{itemize}
+
 \section{Моки сервисов}
+\include{test2}
 \small
+вставьте здесь
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k}{class} \PY{n+nc}{SofeaEmployerMock}\PY{p}{(}\PY{n}{ServiceMock}\PY{p}{)}\PY{p}{:}
  \PY{k}{def} \PY{n+nf}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:}
@@ -181,6 +192,7 @@
 \section{Тесты}
 
 \small
+вставьте здесь
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{register}\PY{p}{(}\PY{n}{SofeaEmployerMock}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{execute\PYZus{}async\PYZus{}method}\PY{p}{(}
@@ -198,19 +210,34 @@
 
 \verb+self.register+, \verb+self.handler+, \verb+execute_async_method+ - из суперкласса
 
+\section{Вызов тестирования интеграционного слоя}
+
+Почти все тесты ходят за одними и теми же данными (i.e. вакансия, сессия), и в то же время очевидно не всем подойдет один и тот же стандартный ответ
+
+Ответы генерируют внешние сервисы, которые лежат в другом репозитории и обновляются в случайный момент времени
+
+Если контракт одного HTTP ресурса поменлся, тесты (в идеальном мире) показывают, что код, существенно его использующий, сломался
+
+Как ориентироваться в моках?
+
+\section{Репозиторий моков}
+
+Напротив, развязан c frontik'ом и даже с питоном
+
+Как оказалось, одного xml мало, мы храним рядом с ним ещё и необходимые header'ы
+
+И ещё отдельно пару сервис-ресурс
+
 \section{Куда можно двигаться дальше}
 
 \begin{enumerate}
-\item Отказаться от наивного вручную написанного xml в моках внешних сервисов, не потеряв при этом простоты и наглядности
-\item Требуемые доработки:
-\begin{itemize}
-\item больше документации
-\item поддержка \emph{POST}, а заодно \emph{DELETE} и \emph{PUT}
-\item поддержка Content-Type \emph{не} XML
-
-\end{itemize}
-
+\item Документация
+\item Более внятные сообщения об ошибках
 \end{enumerate}
+
+\section{Предлагаю критиковать}
+
+
 
 \end{document}
 
