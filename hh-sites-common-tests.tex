@@ -8,6 +8,7 @@
 \usepackage{slides}
 
 \usepackage{graphicx}
+\usepackage{pdfpages}
 
 \def\Person{Шапошников А.А.}
 \def\Title{Тесты во фронтике}
@@ -55,15 +56,25 @@
 \item Не должны зависеть от способа их запуска и чего-то требовать от окружения (т.е. unit тесты)
 \end{enumerate}
 
+\section{}
+\begin{figure}
+\includegraphics[page=1, scale=1]{frontikarchitecture.pdf}
+%\includepdf[page=1]{frontikarchitecture.pdf}
+\end{figure}
+
 \section{Тестовый фреймворк}
 
 \begin{itemize}
-\item Родилась идея, как это все реализовать
 \item Приложения frontik ходят в бэкэнды, затем опционально накладывают xsl
 \item Такая узкая специализация позволяет встроиться и перехватывать запросы в сетевом стеке и приложение изолировано
 
-
 \end{itemize}
+
+\section{}
+\begin{figure}
+\includegraphics[page=1, scale=2]{interconnection.pdf}
+%\includepdf[pages={1}]{}
+\end{figure}
 
 \section{Ключевые решения в ходе разработки}
 
