@@ -1,6 +1,9 @@
 #!/bin/sh
 #create.sh
 
+pdfcrop interconnection.pdf interconnection.pdf
+pdfcrop frontikarchitecture.pdf frontikarchitecture.pdf
+
 pygmentize -f latex -O full test.py > test.tex
 grep -v usepackage test.tex  | grep -v document | grep -v documentclass > test2.tex
 

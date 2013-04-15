@@ -57,8 +57,8 @@
 \end{enumerate}
 
 \section{}
-\begin{figure}
-\includegraphics[page=1, scale=1]{frontikarchitecture.pdf}
+\begin{figure}[ht!]
+\includegraphics[page=1, scale=1.6]{frontikarchitecture.pdf}
 %\includepdf[page=1]{frontikarchitecture.pdf}
 \end{figure}
 
@@ -69,6 +69,12 @@
 \item Такая узкая специализация позволяет встроиться и перехватывать запросы в сетевом стеке и приложение изолировано
 
 \end{itemize}
+
+\section{}
+\begin{figure}[ht!]
+\includegraphics[page=1, scale=1.6]{frontiktesting.pdf}
+%\includepdf[page=1]{frontikarchitecture.pdf}
+\end{figure}
 
 \section{}
 \begin{figure}
@@ -95,47 +101,56 @@
 
 \section{Код под тестом}
 \small
+\inputminted[linenos=true]{python}{code.py}
 
-\include{test2}
-вставьте здесь
-
-\section{Тест}
+\section{Тесты}
 
 \small
 \inputminted[linenos=true]{python}{test.py}
 
-\verb+vacancy_list_page_by_manager+ - это метод под тестом
+\verb+vacancies_by_manager+ - это метод под тестом
 
-\verb+self.register+, \verb+self.handler+, \verb+execute_async_method+ - из суперкласса
+\verb+env+, \verb+EmptyEnvironment+ - импортированы из frontik.testing
+\verb+call+ - позволяет вызвать тестируюемую функцию в подготовленном окружении
 
 \section{Вызов тестирования интеграционного слоя}
 
-Почти все тесты ходят за одними и теми же данными (i.e. вакансия, сессия), и в то же время очевидно не всем подойдет один и тот же стандартный ответ
+Почти все тесты ходят за одними и теми же данными (i.e. вакансия, сессия), и в то же время не всем подойдет один и тот же ответ
 
 Ответы генерируют внешние сервисы, которые лежат в другом репозитории и обновляются в случайный момент времени
 
-Если контракт одного HTTP ресурса поменлся, тесты (в идеальном мире) показывают, что код, существенно его использующий, сломался
+Если контракт одного HTTP ресурса поменялся с одной стороны, тесты (в идеальном мире) показывают, что код, существенно его использующий на другой стороне, сломался
 
 Как ориентироваться в моках?
 
 \section{Репозиторий моков}
 
-Напротив, развязан c frontik'ом и даже с питоном
+Напротив, развязан c frontik'ом и даже по возможности с питоном
 
 Как оказалось, одного xml мало, мы храним рядом с ним ещё и необходимые header'ы
 
-И ещё отдельно пару сервис-ресурс
+И ещё отдельно пару сервис-ресурс (aka host-url)
 
 \section{Куда можно двигаться дальше}
 
 \begin{enumerate}
-\item Документация
-\item Более внятные сообщения об ошибках
+\Large \item Документация
+\item \normalsize  Более внятные сообщения об ошибках
+\item \small Поддержка более широкого интерфейса, например IO loop
+\item \small Версионность моков
+\item \footnotesize "Встроенная" поддержка protobuf
+\item \tiny Автоматизированный прогон тестов всех репозиториев после изменений в моках
+\item \scriptsize Больше сахара, чтобы тесты не выглядели так страшно
+\item \scriptsize Автоматическое определение race conditions
+\item \scriptsize ...
+
+
+
+
 \end{enumerate}
 
 \section{Предлагаю критиковать}
-
-
+Что пошло не так
 
 \end{document}
 
