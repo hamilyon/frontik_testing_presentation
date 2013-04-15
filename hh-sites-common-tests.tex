@@ -76,12 +76,6 @@
 %\includepdf[page=1]{frontikarchitecture.pdf}
 \end{figure}
 
-\section{}
-\begin{figure}
-\includegraphics[page=1, scale=2]{interconnection.pdf}
-%\includepdf[pages={1}]{}
-\end{figure}
-
 \section{Ключевые решения в ходе разработки}
 
 \begin{itemize}
@@ -92,12 +86,12 @@
 
 \end{itemize}
 
-\section{Стандартный подход к тестированию}
-\begin{itemize}
-\item setUp подготавливает общую часть
+%\section{Стандартный подход к тестированию}
+%\begin{itemize}
+%\item setUp подготавливает общую часть
 
-\item caveat: не поддерживается более одного вызова call в одном тесте
-\end{itemize}
+%\item caveat: не поддерживается более одного вызова call в одном тесте
+%\end{itemize}
 
 \section{Код под тестом}
 \small
@@ -105,13 +99,14 @@
 
 \section{Тесты}
 
-\small
+\tiny
 \inputminted[linenos=true]{python}{test.py}
 
 \verb+vacancies_by_manager+ - это метод под тестом
-
-\verb+env+, \verb+EmptyEnvironment+ - импортированы из frontik.testing
+\verb+EmptyEnvironment+ - импортирован из frontik.testing, создает окружение с моками внешних сервисов
 \verb+call+ - позволяет вызвать тестируюемую функцию в подготовленном окружении
+
+caveat: не поддерживается более одного вызова call в одном тесте
 
 \section{Вызов тестирования интеграционного слоя}
 
@@ -122,6 +117,11 @@
 Если контракт одного HTTP ресурса поменялся с одной стороны, тесты (в идеальном мире) показывают, что код, существенно его использующий на другой стороне, сломался
 
 Как ориентироваться в моках?
+
+\section{}
+\begin{figure}
+\includegraphics[page=1, scale=2]{interconnection.pdf}
+\end{figure}
 
 \section{Репозиторий моков}
 
@@ -144,13 +144,20 @@
 \item \scriptsize Автоматическое определение race conditions
 \item \scriptsize ...
 
-
-
-
 \end{enumerate}
 
+\section{Резюме}
+
+Справились с проблемой TDD во фронтике
+
+Создали репозиторий для хранения того, что у нас летает по сети
+
+Есть надежда, что ломаться теперь будет в разработке и при сборке, а не в проде
+
+Тесты вылгядят и читаются сносно
+
 \section{Предлагаю критиковать}
-Что пошло не так
+Что не так?
 
 \end{document}
 
