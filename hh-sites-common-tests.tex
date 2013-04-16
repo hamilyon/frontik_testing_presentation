@@ -2,10 +2,10 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[english, russian]{babel}
-\usepackage{minted}
 
 % "А вот теперь --- слайды!"
 \usepackage{slides}
+\usepackage{minted}
 
 \usepackage{graphicx}
 \usepackage{pdfpages}
@@ -99,11 +99,20 @@
 
 \section{Тесты}
 
-\tiny
+\small
 \inputminted[linenos=true]{python}{test.py}
 
+\section{Тесты (продолжение)}
+\verb+set_stub+ - из моков, устанавливает в окружении mock
+
+\verb+favorite_vacancies+ - пара (сервис, ресурс)
+
+\verb+'serviceHost/ManagerVacancies.xml'+ - файл с ответом
+
 \verb+vacancies_by_manager+ - это метод под тестом
+
 \verb+EmptyEnvironment+ - импортирован из frontik.testing, создает окружение с моками внешних сервисов
+
 \verb+call+ - позволяет вызвать тестируюемую функцию в подготовленном окружении
 
 caveat: не поддерживается более одного вызова call в одном тесте
@@ -150,11 +159,11 @@ caveat: не поддерживается более одного вызова c
 
 Справились с проблемой TDD во фронтике
 
-Создали репозиторий для хранения того, что у нас летает по сети
+Создали репозиторий для хранения того, что у нас отвечают какие сервисы
 
 Есть надежда, что ломаться теперь будет в разработке и при сборке, а не в проде
 
-Тесты вылгядят и читаются сносно
+Тесты выглядят и читаются сносно
 
 \section{Предлагаю критиковать}
 Что не так?
