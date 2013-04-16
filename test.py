@@ -1,7 +1,7 @@
 class TestEmployerVacanciesPage(TestCase):
     def test_vacancies_by_manager(self,):
         env = EmptyEnvironment()
-        set_stub(env, favorite_vacancies,
+        set_stub(env, manager_vacancies,
             'serviceHost/ManagerVacancies.xml')
         doc = env.configure(
             vacancies_prolongate_highlight = 3
